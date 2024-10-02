@@ -1,0 +1,19 @@
+#spring.application.name=FootballTaka
+
+spring:
+  config:
+    import: security-variable.yml
+  application:
+    name: FootballTaka
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/footballtaka
+    username: root
+    password: ${mysql.password}
+  thymeleaf:
+    cache: false
+  mvc:
+    static-path-pattern: /static/**
+
+mybatis:
+  mapper-locations: mappers/*Mapper.xml
