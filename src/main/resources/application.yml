@@ -1,5 +1,3 @@
-#spring.application.name=FootballTaka
-
 spring:
   config:
     import: security-variable.yml
@@ -14,6 +12,12 @@ spring:
     cache: false
   mvc:
     static-path-pattern: /static/**
+  jpa:
+    hibernate:
+      ddl-auto: update  # 테이블 자동 생성/업데이트
+    naming:
+      implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 mybatis:
-  mapper-locations: mappers/*Mapper.xml
+  mapper-locations: classpath:mappers/*Mapper.xml
