@@ -10,8 +10,6 @@ import com.jinu.footballtaka.user.repository.UserRepository;
 @Service
 public class UserService {
 	
-	// IoC (Inversion of Control) : 제어의 역전 
-	// DI(Dependency injection) : 의존성 주입 
 	private UserRepository userRepository;
 	private HashingEncoder encoder;
 	

@@ -1,18 +1,46 @@
 @charset "UTF-8";
 
 #wrap {
-    width:800px;
+    width:1000px;
     margin:0 auto;
+    height:1200px;
 }
 
-.main-contents {
-    width:430px;
+.main-menu {
+    height: 40px;
 }
 
 .login-box {
     width:400px;
 }
 
-.big-font {
-    font-size:20px;
+a {
+    color: black; /* 원하는 색상으로 변경 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+a:hover {
+    color: blue; /* 마우스 호버 시 색상 */
+}
+
+nav.main-menu a {
+    color: #0000A0; /* 텍스트 색상을 #7800DB로 설정 */
+    font-size: 25px; /* 글자 크기를 25px로 설정 */
+    text-decoration: none; /* 기본 밑줄 제거 */
+}
+
+.board h5 {
+    font-size: 25px; /* 제목 크기 조정 (예: 1.5rem) */
+    color: #0000A0; /* 제목 색상 조정 (예: #7800DB) */
+    font-weight: bold;
+}
+
+.board ul li a {
+    font-size: 20px; /* 링크 글자 크기 조정 (예: 1.2rem) */
+    color: #000000; /* 기본 링크 색상 (예: 검정색) */
+    text-decoration: none; /* 링크의 밑줄 제거 */
+}
+
+.nav-fill {
+    letter-spacing: 8px; /* 원하는 간격으로 조정 */
 }

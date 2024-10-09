@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+</head>
+
+<body>
+    <div id="wrap" class="container">
+        <th:block th:replace="~{fragments/header :: header}"></th:block>
+        
+        <section class="contents d-flex flex-column" layout:fragment="contents">
+             
+             <article class="banner1">
+                <div>
+                     <img src="https://www.zaha-hadid.com/wp-content/uploads/2020/08/5_ZHA_Xi%E2%80%99an-International-Football-Centre_Render_by_Negativ_lowres.jpg" 
+                             alt="이미지 1" class="img-fluid banner-img">
+                </div>
+            </article>          
+            
+            <article class="board text-black p-4 mt-4">
+                <div class="row justify-content-between"> <!-- 양쪽 정렬을 위해 justify-content-between 추가 -->
+                    <div class="col-md-4">
+                    	<div class="d-flex align-items-center"> <!-- Flexbox 사용 -->
+                            <img th:src="@{/static/soccerBall.jpg}" alt="축구공" style="max-height: 30px; margin-right: 10px; margin-top: 0;"> 
+                            <h5 class="mt-2">자유게시판</h5>
+                        </div>
+                        <ul class="list-unstyled">
+                            <li><a class="text-black" href="#">자유게시판 글 제목 1</a></li>
+                            <li><a class="text-black" href="#">자유게시판 글 제목 2</a></li>
+                            <li><a class="text-black" href="#">자유게시판 글 제목 3</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center"> <!-- Flexbox 사용 -->
+                            <img th:src="@{/static/soccerBall.jpg}" alt="축구공" style="max-height: 30px; margin-right: 10px; margin-top: 0;"> 
+                            <h5 class="mt-2">국내축구 게시판</h5>
+                        </div>
+                        <ul class="list-unstyled">
+                            <li><a class="text-black" href="#">국내축구 게시판 글 제목 1</a></li>
+                            <li><a class="text-black" href="#">국내축구 게시판 글 제목 2</a></li>
+                            <li><a class="text-black" href="#">국내축구 게시판 글 제목 3</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center"> <!-- Flexbox 사용 -->
+                            <img th:src="@{/static/soccerBall.jpg}" alt="축구공" style="max-height: 30px; margin-right: 10px; margin-top: 0;"> 
+                            <h5 class="mt-2">해외축구 게시판</h5>
+                        </div>
+                        <ul class="list-unstyled">
+                            <li><a class="text-black" href="#">해외축구 게시판 글 제목 1</a></li>
+                            <li><a class="text-black" href="#">해외축구 게시판 글 제목 2</a></li>
+                            <li><a class="text-black" href="#">해외축구 게시판 글 제목 3</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+            
+        </section>
+
+        <th:block th:replace="~{fragments/footer :: footer}"></th:block>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+    <th:block layout:fragment="script"></th:block>
+    
+</body>
+</html>

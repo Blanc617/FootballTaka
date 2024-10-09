@@ -11,6 +11,16 @@
 <body>
     <div id="wrap">
         <th:block th:replace="~{fragments/header :: header}"></th:block>
+        	 <nav class="main-menu">
+		        <div class="nav-fill font-weight-bold justify-content-center">
+	                <a class="mx-4" href="/post?category=Free">자유게시판</a>
+	                <a class="mx-4" href="/post?category=Domestic">국내축구</a>
+	                <a class="mx-4" href="/post?category=International">해외축구</a>
+	                <a class="mx-4" href="/user/mypage">마이페이지</a>
+            	</div>
+		    </nav>
+	
+		        	
         <th:block layout:fragment="contents"></th:block>
         <th:block th:replace="~{fragments/footer :: footer}"></th:block>
     </div>
