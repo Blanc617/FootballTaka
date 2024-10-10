@@ -15,9 +15,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update  # 테이블 자동 생성/업데이트
-    naming:
-      implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 mybatis:
   mapper-locations: classpath:mappers/*Mapper.xml

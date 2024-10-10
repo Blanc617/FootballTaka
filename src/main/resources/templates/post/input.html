@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+</head>
+
+<body>
+    
+    <section class="contents" layout:fragment="contents">
+        <div class="post-box my-5">
+            <h1 class="text-center">게시글 입력</h1>
+            <label for="boardSelect">게시판 선택:</label>
+            <div class="d-flex justify-content-left">
+            	<select class="form-control mt-2" id="boardSelect">
+	                <option value="free">자유 게시판</option>
+	                <option value="domestic">국내축구 게시판</option>
+	                <option value="international">해외축구 게시판</option>
+	            </select>
+	        </div>
+
+            <input type="text" class="form-control mt-4" placeholder="제목을 입력하세요" id="titleInput">
+            <textarea class="form-control mt-2" rows="10" placeholder="내용을 입력하세요" id="contentsInput"></textarea>
+            <input type="file" class="mt-2" id="fileInput">
+            <div class="d-flex justify-content-between mt-3">
+                <a href="/post/list-view" class="btn btn-secondary">목록으로</a>
+                <button type="button" class="btn btn-primary" id="saveBtn">저장</button>
+            </div>
+        </div>
+    </section>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+
+    <script layout:fragment="script">
+    $(document).ready(function() {
+        $("#saveBtn").on("click", function() {
+            let title = $("#titleInput").val();
+            let contents = $("#contentsInput").val();
+            let file = $("#fileInput")[0].files[0];
+            let boardType = $("#boardSelect").val();
+
+            if (title === "") {
+                alert("제목을 입력하세요");
+                return;
+            }
+            
+            if (contents === "") {
+                alert("내용을 입력하세요");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("title", title);
+            formData.append("contents", contents);
+            formData.append("boardType", boardType);
+            if (file) {
+                formData.append("imageFile", file);
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/post/create",
+                data: formData,
+                enctype: "multipart/form-data",
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if (data.result === "success") {
+                        location.href = "/post/list-view"; 
+                    } else {
+                        alert(data.message || "메모 입력 실패");
+                    }
+                },
+                error: function() {
+                    alert("메모 입력 에러!");
+                }
+            });
+        });
+    });
+</script>
+
+    
+</body>
+</html>
