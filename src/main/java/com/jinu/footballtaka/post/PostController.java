@@ -16,67 +16,74 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/post")
 @Controller
 public class PostController {
-	
-	private final PostService postService;
-	
-	public PostController(PostService postService) {
-		this.postService = postService;
-	}
+    
+    private final PostService postService;
+    
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
-	@GetMapping("/list-view")
-	public String listView(Model model) {
-	    List<Post> posts = postService.getAllPosts(); 
-	    model.addAttribute("posts", posts);
-	    return "post/list"; 
-	}
+    @GetMapping("/list-view")
+    public String listView(@RequestParam(value = "boardType", required = false, defaultValue = "free") String boardType, Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        
+        if (userId == null) {
+            return "redirect:/login";
+        }
 
-	@GetMapping("/list-view/free")
-	public String listFreePosts(Model model, HttpSession session) {
-	    return listPostsByCategory("free", model, session);
-	}
+        List<Post> posts = postService.getPostListByCategory(userId, boardType); // 게시판 타입에 따른 게시글 목록 불러오기
+        model.addAttribute("posts", posts);
+        model.addAttribute("boardType", boardType); // 현재 게시판 타입을 뷰에 전달
+        return "post/list";
+    }
 
-	@GetMapping("/list-view/domestic")
-	public String listDomesticPosts(Model model, HttpSession session) {
-	    return listPostsByCategory("domestic", model, session);
-	}
+    @GetMapping("/create-view")
+    public String showPostInputForm(Model model) {
+        model.addAttribute("boardTypes", List.of("free", "domestic", "international"));
+        return "post/input"; 
+    }
+    
+    @GetMapping("/detail-view")
+    public String showPostDetail(@RequestParam("id") Integer id, Model model) {
+        if (id == null) {
+            return "redirect:/post/list-view/free"; 
+        }
+        
+        Post post = postService.getPost(id);
+        
+        if (post == null) {
+            return "redirect:/post/list-view/free";
+        }
 
-	@GetMapping("/list-view/international")
-	public String listInternationalPosts(Model model, HttpSession session) {
-	    return listPostsByCategory("international", model, session);
-	}
+        model.addAttribute("post", post);
+        return "post/detail"; 
+    }
 
-	private String listPostsByCategory(String category, Model model, HttpSession session) {
-	    Integer userId = (Integer) session.getAttribute("userId");
+    @GetMapping("/list-view/free")
+    public String listFreePosts(Model model, HttpSession session) {
+        return listPostsByCategory("free", model, session);
+    }
 
-	    if (userId == null) {
-	        return "redirect:/login";
-	    }
+    @GetMapping("/list-view/domestic")
+    public String listDomesticPosts(Model model, HttpSession session) {
+        return listPostsByCategory("domestic", model, session);
+    }
 
-	    List<Post> postList = postService.getPostListByCategory(userId, category);
-	    model.addAttribute("postList", postList); 
-	    model.addAttribute("category", category); 
-	    return "post/list"; 
-	}
+    @GetMapping("/list-view/international")
+    public String listInternationalPosts(Model model, HttpSession session) {
+        return listPostsByCategory("international", model, session);
+    }
 
-	@GetMapping("/create-view")
-	public String showPostInputForm(Model model) {
-		model.addAttribute("boardTypes", List.of("free", "domestic", "international"));
-		return "post/input"; 
-	}
-	
-	@GetMapping("/detail-view")
-	public String showPostDetail(@RequestParam("id") Integer id, Model model) {
-		if (id == null) {
-			return "redirect:/post/list-view/free"; 
-		}
-		
-		Post post = postService.getPost(id);
-		
-		if (post == null) {
-			return "redirect:/post/list-view/free";
-		}
+    private String listPostsByCategory(String category, Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
 
-		model.addAttribute("post", post);
-		return "post/detail"; 
-	}
+        if (userId == null) {
+            return "redirect:/login";
+        }
+
+        List<Post> postList = postService.getPostListByCategory(userId, category);
+        model.addAttribute("posts", postList); 
+        model.addAttribute("boardType", category); 
+        return "post/list"; 
+    }
 }

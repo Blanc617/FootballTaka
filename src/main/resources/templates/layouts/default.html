@@ -11,16 +11,15 @@
 <body>
     <div id="wrap">
         <th:block th:replace="~{fragments/header :: header}"></th:block>
-        	 <nav class="main-menu">
-		        <div class="nav-fill font-weight-bold justify-content-center">
-	                <a class="mx-4" href="/post/list-view/free">자유게시판</a>
-	                <a class="mx-4" href="/post/list-view/domestic">국내축구</a>
-	                <a class="mx-4" href="/post/list-view/international">해외축구</a>
-	                <a class="mx-4" href="/user/mypage">마이페이지</a>
-            	</div>
-		    </nav>
-	
-		        	
+        <nav class="main-menu">
+            <div class="nav-fill font-weight-bold justify-content-center">
+                <a class="mx-4" th:href="@{/post/list-view/free}">자유게시판</a>
+                <a class="mx-4" th:href="@{/post/list-view/domestic}">국내축구</a>
+                <a class="mx-4" th:href="@{/post/list-view/international}">해외축구</a>
+                <a class="mx-4" th:href="@{/user/mypage}">마이페이지</a>
+            </div>
+        </nav>
+
         <th:block layout:fragment="contents"></th:block>
         <th:block th:replace="~{fragments/footer :: footer}"></th:block>
     </div>
