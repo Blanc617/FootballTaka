@@ -2,11 +2,13 @@ package com.jinu.footballtaka.post;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.jinu.footballtaka.post.domain.Post;
 import com.jinu.footballtaka.post.service.PostService;
@@ -31,9 +33,9 @@ public class PostController {
             return "redirect:/login";
         }
 
-        List<Post> posts = postService.getPostListByCategory(userId, boardType); // 게시판 타입에 따른 게시글 목록 불러오기
+        List<Post> posts = postService.getPostListByCategory(userId, boardType);
         model.addAttribute("posts", posts);
-        model.addAttribute("boardType", boardType); // 현재 게시판 타입을 뷰에 전달
+        model.addAttribute("boardType", boardType);
         return "post/list";
     }
 
@@ -46,13 +48,13 @@ public class PostController {
     @GetMapping("/detail-view")
     public String showPostDetail(@RequestParam("id") Integer id, Model model) {
         if (id == null) {
-            return "redirect:/post/list-view/free"; 
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
         }
         
         Post post = postService.getPost(id);
         
         if (post == null) {
-            return "redirect:/post/list-view/free";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
         }
 
         model.addAttribute("post", post);

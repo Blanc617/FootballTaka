@@ -13,7 +13,7 @@ import com.jinu.footballtaka.post.repository.PostRepository;
 @Service
 public class PostService {
 	
-	private final PostRepository postRepository; // final로 선언하여 불변성을 보장합니다.
+	private final PostRepository postRepository; 
 	
 	public PostService(PostRepository postRepository) {
 		this.postRepository = postRepository;

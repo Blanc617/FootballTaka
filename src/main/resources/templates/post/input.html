@@ -41,7 +41,7 @@
             let title = $("#titleInput").val();
             let contents = $("#contentsInput").val();
             let file = $("#fileInput")[0].files[0];
-            let boardType = $("#boardSelect").val(); // 드롭박스에서 선택한 값 가져오기
+            let boardType = $("#boardSelect").val(); 
 
             if (title === "") {
                 alert("제목을 입력하세요");
@@ -56,7 +56,7 @@
             let formData = new FormData();
             formData.append("title", title);
             formData.append("contents", contents);
-            formData.append("boardType", boardType); // 선택한 게시판 타입 추가
+            formData.append("boardType", boardType);
             if (file) {
                 formData.append("imageFile", file);
             }

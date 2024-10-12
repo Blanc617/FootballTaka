@@ -13,23 +13,22 @@
     <div id="wrap" class="container">
         <th:block th:replace="~{fragments/header :: header}"></th:block>
         
-        <section class="contents d-flex justify-content-center" layout:fragment="contents">
-        	<div class="post-box my-5" id="memoDetail" th:data-post-id="${memo.id}">
+        <section class="contents" layout:fragment="contents">
+        	<div class="post-box my-5" id="memoDetail" th:data-post-id="${post.id}">
         		<h1 class="text-center">메모 상세</h1>
-        		<input type="text" class="form-control mt-4" placeholder="제목을 입력하세요" id="titleInput" th:value="${memo.title}"  value="메모 제목입니다.">
-        		<textarea class="form-control mt-2" rows="10" placeholder="내용을 입력하세요" id="contentsInput" th:text="${memo.contents}">메모 내용입니다.</textarea>
-        		<img th:src="${memo.imagePath}">
+        		<input type="text" class="form-control mt-4" placeholder="제목을 입력하세요" id="titleInput" th:value="${post.title}" value="메모 제목입니다.">
+        		<textarea class="form-control mt-2" rows="10" placeholder="내용을 입력하세요" id="contentsInput" th:text="${post.contents}">메모 내용입니다.</textarea>
+        		<img th:src="${post.imagePath}">
         		<div class="d-flex justify-content-between mt-3">
         			<button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
         		
         			<div>
 	        			<a href="/post/list-view" class="btn btn-secondary">목록으로</a>
-	        			<button type="button" class="btn btn-secondary" id="saveBtn" >수정</button>
+	        			<button type="button" class="btn btn-secondary" id="saveBtn">수정</button>
         			</div>
         		</div>
         	</div>
         </section>
-        
         
        <script layout:fragment="script">
        		$(document).ready(function() {
@@ -38,17 +37,17 @@
        				let id = $("#memoDetail").data("post-id");
        				
        				$.ajax({
-       					type:"delete"
-       					, url:"/post/delete"
-       					, data:{"id":id}
-       					, success:function(data) {
+       					type: "delete",
+       					url: "/post/delete",
+       					data: { "id": id },
+       					success: function(data) {
        						if(data.result == "success") {
        							location.href = "/post/list-view";
        						} else {
        							alert("삭제 실패!!");
        						}
-       					}
-       					, error:function() {
+       					},
+       					error: function() {
        						alert("삭제 에러!!");
        					}
        				});
@@ -57,29 +56,26 @@
        			$("#saveBtn").on("click", function() {
        				let title = $("#titleInput").val();
        				let contents = $("#contentsInput").val();
-       				
        				let id = $("#memoDetail").data("post-id");
        				
        				$.ajax({
-       					type:"put"
-       					, url:"/post/update"
-       					, data:{"id":id, "title":title, "contents":contents}
-       					, success:function(data) {
+       					type: "put",
+       					url: "/post/update",
+       					data: { "id": id, "title": title, "contents": contents },
+       					success: function(data) {
        						if(data.result == "success") {
        							location.reload();
        						} else {
        							alert("수정 실패!!");
        						}
-       					}
-       					, error:function() {
+       					},
+       					error: function() {
        						alert("수정 에러!!");
        					}
        				});
        			});
-       			
        		});
        </script>            
-        
         
         <th:block th:replace="~{fragments/footer :: footer}"></th:block>
     </div>
