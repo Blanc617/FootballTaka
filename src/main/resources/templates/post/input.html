@@ -62,21 +62,20 @@
             }
 
             $.ajax({
-                type: "post",
-                url: "/post/create",
-                data: formData,
-                enctype: "multipart/form-data",
+                url: '/post/create',
+                method: 'POST',
+                data: formData, 
                 processData: false,
                 contentType: false,
-                success: function(data) {
-                    if (data.result === "success") {
-                        location.href = "/post/list-view?boardType=" + boardType; 
+                success: function(response) {
+                    if (response.result === "success") {
+                        window.location.href = response.redirectUrl; 
                     } else {
-                        alert(data.message || "메모 입력 실패");
+                        alert(response.message); 
                     }
                 },
                 error: function() {
-                    alert("메모 입력 에러!");
+                    alert("게시글 저장 중 오류 발생");
                 }
             });
         });

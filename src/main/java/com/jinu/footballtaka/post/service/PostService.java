@@ -3,6 +3,7 @@ package com.jinu.footballtaka.post.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,5 +48,31 @@ public class PostService {
 
 	public List<Post> getAllPosts() {
 		return postRepository.findAll(); 
+	}
+
+	public boolean deletePost(int postId) {
+	    try {
+	        postRepository.deleteById(postId);
+	        return true; 
+	    } catch (EmptyResultDataAccessException e) {
+	        System.err.println("Post with ID " + postId + " does not exist.");
+	        return false; 
+	    }
+	}
+
+	public Post updatePost(int postId, String title, String contents, String boardType, MultipartFile file) {
+		Optional<Post> optionalPost = postRepository.findById(postId);
+		if (optionalPost.isPresent()) {
+			Post post = optionalPost.get();
+			post.setTitle(title);
+			post.setContents(contents);
+			post.setBoardType(boardType);
+			if (file != null && !file.isEmpty()) {
+				String urlPath = FileManager.saveFile(post.getUserId(), file);
+				post.setImagePath(urlPath);
+			}
+			return postRepository.save(post);
+		}
+		return null;
 	}
 }
