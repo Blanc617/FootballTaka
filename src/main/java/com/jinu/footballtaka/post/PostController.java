@@ -25,7 +25,9 @@ public class PostController {
     }
 
     @GetMapping("/list-view/{boardType}")
-    public String listView(@PathVariable String boardType, Model model, HttpSession session) {
+    public String listView(
+    		@PathVariable("boardType") String boardType, Model model
+    		, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
         
         if (userId == null) {
@@ -45,19 +47,29 @@ public class PostController {
         return "post/input"; 
     }
     
-    @GetMapping("/detail-view")
+    @GetMapping("/detail-view/{boardType}/{id}")
     public String showPostDetail(
-            @RequestParam("id") int id,
-            @RequestParam("boardType") String boardType, 
-            Model model) {
-                
+            @PathVariable("boardType") String boardType,
+            @PathVariable("id") int id,
+            Model model,
+            HttpSession session) {
+        
+        Integer userId = (Integer) session.getAttribute("userId");
+        
+        if (userId == null) {
+            return "redirect:/login";
+        }
+
         Post post = postService.getPost(id);
         
         model.addAttribute("post", post);
         model.addAttribute("boardType", boardType);
-        
+        session.setAttribute("boardType", boardType); // 세션에 저장
+
         return "post/detail"; 
     }
+
+
 
 
 

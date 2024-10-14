@@ -52,5 +52,6 @@ tasks.withType(JavaCompile) {
 }
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs += ['-parameters']
+    options.compilerArgs << "-parameters"
 }
+

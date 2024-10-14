@@ -23,14 +23,14 @@
                             <th>No</th>
                             <th>제목</th>
                             <th>작성 시간</th>
-                            <th>추천수</th>
+                            <th>좋아요 수</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="post : ${posts}">
                             <td th:text="${post.id}"></td>
                             <td>
-                                <a th:href="@{/post/detail-view(id=${post.id}, boardType=${post.boardType})}" th:text="${post.title}">상세보기</a>
+                            	<a th:href="@{/post/detail-view/{boardType}/{id}(boardType=${post.boardType}, id=${post.id})}" th:text="${post.title}">상세보기</a>
                             </td>
                             <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
