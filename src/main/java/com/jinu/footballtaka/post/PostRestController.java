@@ -82,17 +82,20 @@ public class PostRestController {
 
 
     @PutMapping("/update")
-    public Map<String, String> updatePost(
+    public Map<String, Object> updatePost(
             @RequestParam("id") int id,
             @RequestParam("title") String title,
             @RequestParam("contents") String contents,
             @RequestParam(value = "boardType", required = false) String boardType,
             @RequestParam(value = "imageFile", required = false) MultipartFile file) {
         
-        Map<String, String> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         
-        if (postService.updatePost(id, title, contents, boardType, file) != null) {
+        Post updatedPost = postService.updatePost(id, title, contents, boardType, file);
+        
+        if (updatedPost != null) {
             resultMap.put("result", "success");
+            resultMap.put("boardType", updatedPost.getBoardType());
         } else {
             resultMap.put("result", "fail");
             resultMap.put("message", "게시글 수정 실패");
@@ -100,6 +103,7 @@ public class PostRestController {
         
         return resultMap;
     }
+
 
 
 }
