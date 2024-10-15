@@ -96,6 +96,7 @@ public class PostRestController {
         if (updatedPost != null) {
             resultMap.put("result", "success");
             resultMap.put("boardType", updatedPost.getBoardType());
+            resultMap.put("postId", updatedPost.getId());
         } else {
             resultMap.put("result", "fail");
             resultMap.put("message", "게시글 수정 실패");

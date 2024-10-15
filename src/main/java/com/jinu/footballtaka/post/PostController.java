@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jinu.footballtaka.post.domain.Post;
 import com.jinu.footballtaka.post.service.PostService;
@@ -24,29 +23,24 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/list-view/{boardType}")
-    public String listView(
-    		@PathVariable("boardType") String boardType, Model model
-    		, HttpSession session) {
+    @GetMapping("/edit/{id}")
+    public String showPostEditForm(@PathVariable("id") int id, Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-        
+
         if (userId == null) {
-            return "redirect:/login";
+            return "redirect:/login"; 
         }
 
-        List<Post> posts = postService.getPostListByCategory(userId, boardType);
-        model.addAttribute("posts", posts);
-        model.addAttribute("boardType", boardType);
-        return "post/list";
-    }
+        Post post = postService.getPost(id);
+        if (post == null || post.getUserId() != userId) {
+            return "redirect:/post/list-view/free"; 
+        }
 
-
-    @GetMapping("/create-view")
-    public String showPostInputForm(Model model) {
-        model.addAttribute("boardTypes", List.of("free", "domestic", "international"));
+        model.addAttribute("post", post); 
+        model.addAttribute("boardType", post.getBoardType()); 
         return "post/input"; 
     }
-    
+
     @GetMapping("/detail-view/{boardType}/{id}")
     public String showPostDetail(
             @PathVariable("boardType") String boardType,
@@ -64,14 +58,18 @@ public class PostController {
         
         model.addAttribute("post", post);
         model.addAttribute("boardType", boardType);
-        session.setAttribute("boardType", boardType); // 세션에 저장
+        session.setAttribute("boardType", boardType); 
 
         return "post/detail"; 
     }
 
 
 
-
+    @GetMapping("/create-view")
+    public String showPostInputForm(Model model) {
+        model.addAttribute("boardTypes", List.of("free", "domestic", "international"));
+        return "post/input"; 
+    }
 
     @GetMapping("/list-view/free")
     public String listFreePosts(Model model, HttpSession session) {
