@@ -11,7 +11,9 @@
         <th:block th:replace="~{fragments/header :: header}"></th:block>
         
         <section class="contents" layout:fragment="contents">
-            <div class="post-box my-5" id="memoDetail" th:data-post-id="${post.id}">
+        	<div class="post-box my-5" id="memoDetail" th:data-post-id="${post.id}" th:data-board-type="${boardType}">
+		    
+                
                 <h1 class="text-center">게시글 상세</h1>
                 
                 <div class="form-row align-items-center d-flex mb-3">
@@ -29,31 +31,32 @@
                 
                 <div class="d-flex justify-content-between mt-3">
                     <div>
-                        <a href="#" class="btn btn-secondary" id="listBtn">목록으로</a>                    
+                    	<a href="/post/list-view/{boardType}" class="btn btn-secondary" id="listBtn">목록으로</a>
                     </div>
                 </div>
 
                 <div class="text-right mt-3">
-                    <a th:href="@{/post/edit/{id}(id=${post.id})}">수정하기</a>
+                    <a th:href="@{/post/edit/{id}(id=${post.id})}" class="btn btn-primary">수정하기</a>
                 </div>
 
             </div>
         </section>
-        
-        <div id="boardType" data-board-type="/*[[${boardType}]]*/"></div>
 
-		<script>
-		    $(document).ready(function() {
-		        let boardType = $("#boardType").data("board-type");
-		
-		        if (!boardType) {
-		            alert("게시판 타입을 찾을 수 없습니다.");
-		        } else {
-		            $("#listBtn").attr("href", "/post/list-view/" + boardType);
-		        }
-		    });
-		</script>
+        <div id="boardType" data-board-type="${boardType != null ? boardType : 'default'}"></div>
 
+        <script>
+        $(document).ready(function() {
+            let boardType = $("#boardType").data("board-type"); 
+            console.log("Board Type:", boardType); 
+            let postId = $("#memoDetail").data("post-id");
+            if (boardType) {
+                $("#listBtn").attr("href", "/post/list-view/" + boardType);
+            } else {
+                console.error("게시판 타입을 찾을 수 없습니다.");
+                $("#listBtn").attr("href", "/post/list-view/default");
+            }
+        });
+        </script>
 
         <th:block th:replace="~{fragments/footer :: footer}"></th:block>
     </div>

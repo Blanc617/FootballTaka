@@ -24,21 +24,27 @@ public class PostController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showPostEditForm(@PathVariable("id") int id, Model model, HttpSession session) {
+    public String showPostEditForm(
+            @PathVariable("id") int id, Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {
-            return "redirect:/login"; 
+            return "redirect:/login";
         }
 
         Post post = postService.getPost(id);
-        if (post == null || post.getUserId() != userId) {
-            return "redirect:/post/list-view/free"; 
+        if (post == null) {
+            System.out.println("게시글이 존재하지 않습니다.");
+            return "redirect:/post/list-view/free";
         }
 
+        System.out.println("게시글 ID: " + post.getId());
+        System.out.println("게시판 타입: " + post.getBoardType());
+
+        String boardType = post.getBoardType(); 
         model.addAttribute("post", post); 
-        model.addAttribute("boardType", post.getBoardType()); 
-        return "post/input"; 
+        model.addAttribute("boardType", boardType);
+        return "post/post-detail"; 
     }
 
     @GetMapping("/detail-view/{boardType}/{id}")
@@ -47,21 +53,27 @@ public class PostController {
             @PathVariable("id") int id,
             Model model,
             HttpSession session) {
-        
+
         Integer userId = (Integer) session.getAttribute("userId");
-        
+
         if (userId == null) {
             return "redirect:/login";
         }
 
         Post post = postService.getPost(id);
-        
+
+        if (post == null) {
+            System.out.println("게시글이 존재하지 않습니다.");
+            return "redirect:/post/list-view/" + boardType; 
+        }
+
         model.addAttribute("post", post);
         model.addAttribute("boardType", boardType);
         session.setAttribute("boardType", boardType); 
 
         return "post/detail"; 
     }
+
 
 
 

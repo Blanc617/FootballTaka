@@ -60,13 +60,19 @@ public class PostRestController {
     
     @DeleteMapping("/delete")
     public Map<String, String> deletePost(
-            @RequestParam("id") int id,
+            @RequestParam(value = "id", required = false, defaultValue = "0") int id,
             @RequestParam("boardType") String boardType) {
         
         System.out.println("Received boardType: " + boardType);
-        
+        System.out.println("Delete request received for ID: " + id);
         Map<String, String> resultMap = new HashMap<>();
         
+        if (id == 0) {
+            resultMap.put("result", "fail");
+            resultMap.put("message", "유효하지 않은 게시글 ID입니다.");
+            return resultMap;
+        }
+
         if (postService.deletePost(id)) {
             resultMap.put("result", "success");
             resultMap.put("boardType", boardType); 
@@ -77,6 +83,7 @@ public class PostRestController {
         
         return resultMap;
     }
+
 
 
 

@@ -30,7 +30,10 @@
                         <tr th:each="post : ${posts}">
                             <td th:text="${post.id}"></td>
                             <td>
-                            	<a th:href="@{/post/detail-view/{boardType}/{id}(boardType=${post.boardType}, id=${post.id})}" th:text="${post.title}">상세보기</a>
+                            	<a th:href="@{/post/detail-view/{boardType}/{id}(boardType=${post.boardType}, id=${post.id})}" 
+   th:text="${post.title}" 
+   th:attr="data-board-type=${post.boardType}">상세보기</a>
+                            	
                             </td>
                             <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                         </tr>

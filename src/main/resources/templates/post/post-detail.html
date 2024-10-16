@@ -5,101 +5,123 @@
 
 <head>
     <title>게시글 수정하기</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div id="wrap" class="container">
-        <th:block th:replace="~{fragments/header :: header}"></th:block>
-        <div class="post-box my-5" id="memoDetail" th:data-post-id="${post.id}" th:data-board-type="${boardType}">
-        
+    <div class="post-box my-5" id="memoDetail"
+         th:data-post-id="${post.id}" 
+         th:data-board-type="${boardType}" 
+         th:data-post-title="${post.title}" 
+         th:data-post-contents="${post.contents}">
+
+
         <section class="contents" layout:fragment="contents">
-            <h1 class="text-center">게시글 수정</h1>
-            <input type="text" class="form-control mt-4" placeholder="제목을 입력하세요" id="titleInput" th:value="${post.title}">
-            <textarea class="form-control mt-2" rows="10" placeholder="내용을 입력하세요" id="contentsInput" th:text="${post.contents}"></textarea>
-            <img th:src="${post.imagePath}" alt="Post Image" class="mt-3">
-            <input type="file" id="fileInput" class="mt-3">
-            <div class="d-flex justify-content-between mt-3">
-                <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
-                <div>
-                    <a href="#" class="btn btn-secondary" id="listBtn">목록으로</a>                    
-                    <button type="button" class="btn btn-primary" id="saveBtn">수정</button>
-                </div>
-            </div>
+	      	<div class="post-box my-5" id="memoDetail" th:data-post-id="${post.id}" th:data-board-type="${boardType}" th:data-post-title="${post.title}" th:data-post-contents="${post.contents}">
+	            
+	            <h1 class="text-center">게시글 수정</h1>
+	
+	            <p>Board Type: <span th:text="${boardType}">[boardType not set]</span></p>
+	
+	            <p th:text="'Post ID: ' + (${post.id} != null ? ${post.id} : 'undefined')"></p>
+	            <p th:text="'Board Type: ' + (${boardType} != null ? ${boardType} : 'undefined')"></p>
+	
+	            <input type="text" class="form-control mt-4" placeholder="제목을 입력하세요" id="titleInput" th:value="${post.title}">
+	            
+	            <textarea class="form-control mt-2" rows="10" placeholder="내용을 입력하세요" id="contentsInput" th:text="${post.contents}"></textarea>
+	            
+	            <img th:src="${post.imagePath}" alt="Post Image" class="mt-3">
+	            <input type="file" id="fileInput" class="mt-3">
+	            
+	            <div class="d-flex justify-content-between mt-3">
+	                <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
+	                
+	                <div>
+	                    <a href="/post/list-view/{boardType}" class="btn btn-secondary" id="listBtn">목록으로</a>
+	                    <button type="button" class="btn btn-primary" id="saveBtn">수정</button>
+	                </div>
+	            </div>
+	   		</div>
         </section>
-        
+
         <script layout:fragment="script">
-        $(document).ready(function() {
-            let boardType = 'default'; 
+		    $(document).ready(function() {
+		        let boardType = $("#memoDetail").data("board-type");
+		        let postId = $("#memoDetail").data("post-id");
+		
+		        console.log("HTML data-board-type:", boardType); 
+		        console.log("HTML data-post-id:", postId); 
+		        $("#listBtn").attr("href", "/post/list-view/" + boardType);
+		
+		        $("#deleteBtn").on("click", function() {
+		            let id = $("#memoDetail").data("post-id");
+		            
+		            console.log("Post ID:", id);
+		
+		            if (!id || id === '0') {
+		                alert("게시글 ID가 유효하지 않습니다.");
+		                return;
+		            }
+		
+		            if (confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+		                $.ajax({
+		                    type: "DELETE",
+		                    url: "/post/delete?id=" + id + "&boardType=" + boardType,
+		                    success: function(data) {
+		                        if (data.result === "success") {
+		                            alert("게시글이 삭제되었습니다.");
+		                            location.href = "/post/list-view/" + boardType;
+		                        } else {
+		                            alert("삭제 실패: " + (data.message || "알 수 없는 오류 발생"));
+		                        }
+		                    },
+		                    error: function() {
+		                        alert("삭제 에러가 발생했습니다.");
+		                    }
+		                });
+		            }
+		        });
+		
+		        $("#saveBtn").on("click", function() {
+		            let id = $("#memoDetail").data("post-id");
+		
+		            if (confirm("수정을 진행하시겠습니까?")) {
+		                let title = $("#titleInput").val();
+		                let contents = $("#contentsInput").val();
+		
+		                let formData = new FormData();
+		                formData.append("id", id);
+		                formData.append("title", title);
+		                formData.append("contents", contents);
+		                formData.append("boardType", boardType);
+		                let file = $('#fileInput')[0].files[0];
+		                if (file) {
+		                    formData.append("imageFile", file);
+		                }
+		
+		                $.ajax({
+		                    type: "PUT",
+		                    url: "/post/update",
+		                    data: formData,
+		                    enctype: "multipart/form-data",
+		                    processData: false,
+		                    contentType: false,
+		                    success: function(data) {
+		                        if (data.result === "success") {
+		                            alert("게시글이 수정되었습니다.");
+		                            location.href = "/post/list-view/" + boardType;
+		                        } else {
+		                            alert("수정 실패: " + (data.message || "알 수 없는 오류 발생"));
+		                        }
+		                    },
+		                    error: function() {
+		                        alert("수정 에러가 발생했습니다.");
+		                    }
+		                });
+		            }
+		        });
+		    });
+		</script>
 
-            if (!boardType || boardType === 'default') {
-                alert("게시판 타입을 찾을 수 없습니다.");
-            } else {
-                $("#listBtn").attr("href", "/post/list-view/" + boardType);
-            }
-
-                $("#deleteBtn").on("click", function() {
-                    let id = $("#memoDetail").data("post-id");
-
-                    if (confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-                        $.ajax({
-                            type: "DELETE",
-                            url: "/post/delete",
-                            data: { "id": id, "boardType": boardType },
-                            success: function(data) {
-                                if (data.result === "success") {
-                                    location.href = "/post/list-view/" + boardType;
-                                } else {
-                                    alert("삭제 실패: " + (data.message || "알 수 없는 오류 발생"));
-                                }
-                            },
-                            error: function() {
-                                alert("삭제 에러가 발생했습니다.");
-                            }
-                        });
-                    }
-                });
-
-                $("#saveBtn").on("click", function() {
-                    let id = $("#memoDetail").data("post-id");
-
-                    if (confirm("수정을 진행하시겠습니까?")) {
-                        let title = $("#titleInput").val();
-                        let contents = $("#contentsInput").val();
-
-                        let formData = new FormData();
-                        formData.append("id", id);
-                        formData.append("title", title);
-                        formData.append("contents", contents);
-                        formData.append("boardType", boardType);
-                        let file = $('#fileInput')[0].files[0];
-                        if (file) {
-                            formData.append("imageFile", file);
-                        }
-
-                        $.ajax({
-                            type: "PUT",
-                            url: "/post/update",
-                            data: formData,
-                            enctype: "multipart/form-data",
-                            processData: false,
-                            contentType: false,
-                            success: function(data) {
-                                if (data.result === "success") {
-                                    alert("게시글이 수정되었습니다.");
-                                    location.href = "/post/list-view/" + boardType;
-                                } else {
-                                    alert("수정 실패: " + (data.message || "알 수 없는 오류 발생"));
-                                }
-                            },
-                            error: function() {
-                                alert("수정 에러가 발생했습니다.");
-                            }
-                        });
-                    }
-                });
-            });
-        </script>
-
-        <th:block th:replace="~{fragments/footer :: footer}"></th:block>
     </div>
 </body>
 </html>

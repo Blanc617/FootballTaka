@@ -39,7 +39,12 @@ public class PostService {
 	}
 	
 	public Post getPost(int id) {
-		return postRepository.findById(id).orElse(null);
+	    Optional<Post> optionalPost = postRepository.findById(id);
+	    if (optionalPost.isEmpty()) {
+	        System.out.println("게시글 ID " + id + "에 해당하는 게시글이 없습니다.");
+	        return null;
+	    }
+	    return optionalPost.get();
 	}
 
 	public List<Post> getPostListByCategory(Integer userId, String category) {
